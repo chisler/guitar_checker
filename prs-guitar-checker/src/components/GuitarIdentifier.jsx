@@ -5,12 +5,38 @@ import { getModelLink } from '../utils/prsModelLinks';
 import './GuitarIdentifier.css';
 
 const EXAMPLE_SERIALS = [
+  // Set-Neck Models
+  { serial: '09156989', label: 'Set-Neck (2009)' },
   { serial: '10166759', label: 'Set-Neck (2010)' },
+  { serial: '240380134', label: 'Set-Neck (2024)' },
+  { serial: '08140528', label: 'Set-Neck (2008)' },
+  { serial: '09151231', label: 'Set-Neck (2009)' },
+  { serial: '500200', label: 'Set-Neck (1985)' },
+  { serial: '836800', label: 'Set-Neck (1998)' },
+  
+  // S2 Series
   { serial: '23s2067156', label: 'S2 Series (2023)' },
   { serial: 'S2000001', label: 'S2 Series (2013)' },
-  { serial: 'CE12345', label: 'CE Model' },
-  { serial: 'A1234', label: 'Acoustic' },
+  { serial: 'S2045000', label: 'S2 Series (2020)' },
+  
+  // CE Models
+  { serial: 'CE19581', label: 'CE Model (1999)' },
+  { serial: '70050', label: 'CE Model (1988)' },
+  { serial: '170001', label: 'CE Model (2017)' },
+  
+  // SE Models
   { serial: 'K12345', label: 'SE Korea (2010)' },
+  { serial: 'CTIG097014', label: 'SE Indonesia (2024)' },
+  { serial: 'CTIA12345', label: 'SE Indonesia (2018)' },
+  
+  // Acoustic
+  { serial: 'A150001', label: 'Acoustic (2015)' },
+  { serial: 'A120001', label: 'Acoustic (2012)' },
+  
+  // Other Models
+  { serial: 'SA00500', label: 'Swamp Ash Special (1998)' },
+  { serial: 'EB00300', label: 'Electric Bass (2002)' },
+  { serial: 'AMP090500', label: 'Amplifier (2009)' },
 ];
 
 function GuitarIdentifier() {

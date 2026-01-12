@@ -1,118 +1,65 @@
 # PRS Guitar Year Identifier
 
-A React + Vite web application that identifies PRS (Paul Reed Smith) guitar models and manufacturing years from serial numbers.
-
-**Note:** This is an unofficial tool and is not affiliated with PRS Guitars. For official support, please visit [PRS Support](https://support.prsguitars.com).
+An unofficial web application to identify PRS guitar models and manufacturing years from serial numbers.
 
 ## Features
 
-- 🔍 Identify PRS guitar models and years from serial numbers
-- 📋 Supports all PRS models:
-  - Standard Set-Neck models
-  - CE models (1988-2008 and 2016+)
-  - SE models (Korea and Indonesia)
+- Identify PRS guitars by serial number
+- Supports all PRS models including:
+  - Set-Neck (Standard) models (Custom 24, McCarty, Santana, etc.)
+  - CE Models (1988-2008 and 2016+)
   - S2 Series
-  - Swamp Ash Special
-  - EG models
+  - SE Models (Korea and Indonesia)
   - Acoustic guitars
-  - Bass guitars (Bolt-On, Set-Neck, Electric Bass)
-  - Amplifiers
-  - Speaker Cabinets
-- 🎨 Modern, responsive UI
-- 📖 Direct link to official PRS identification guide
+  - Bass models
+  - Amplifiers and Speaker Cabinets
+- Real-world examples from PRS forums and listings
+- Comprehensive stress test suite (212+ test cases)
 
-## Getting Started
+## Development
 
-### Prerequisites
+### Running the Application
 
-- Node.js (v16 or higher)
-- npm or yarn
-
-### Installation
-
-1. Navigate to the project directory:
-```bash
-cd prs-guitar-checker
-```
-
-2. Install dependencies:
 ```bash
 npm install
-```
-
-3. Start the development server:
-```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to the URL shown in the terminal (typically `http://localhost:5173`)
+### Testing
 
-### Building for Production
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist` directory.
-
-### Preview Production Build
+Run the stress test suite:
 
 ```bash
-npm run preview
+npm test
 ```
 
-## Usage
+The stress test runs automatically as a pre-commit hook to ensure identification logic is working correctly.
 
-1. Enter your PRS guitar's serial number in the input field
-2. Click "Identify Guitar" or press Enter
-3. View the identification results including:
-   - Model type
-   - Manufacturing year
-   - Serial number location
-   - Confidence level
+### Pre-commit Hook
 
-## Serial Number Locations
+A pre-commit hook is configured to run the stress test before each commit. If tests fail, the commit will be blocked.
 
-- **Set-Neck models**: Back of headstock
-- **CE, EG, Swamp Ash Special**: Neck plate on back of guitar
-- **SE models**: Back of headstock
-- **S2 Series**: Back of headstock
-- **Acoustic guitars**: Label inside sound hole
-- **Bass guitars**: Back of headstock or neck plate
-- **Amplifiers**: Back of amp, upper right corner or sticker
-- **Speaker Cabinets**: Back of cabinet, upper right corner
+To manually test the hook:
 
-## Reference
+```bash
+cd prs-guitar-checker
+node scripts/pre-commit-test.js
+```
 
-This application is based on the official PRS Guitars Year Identification guide:
-https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification
+## Disclaimer
 
-A local copy of the guide is saved as `prs_year_identification_guide.txt` in the project root.
-
-## Technologies Used
-
-- React 19
-- Vite 7
-- CSS3 (with modern features like gradients and animations)
+This is an **unofficial** tool and is not affiliated with or endorsed by PRS Guitars. For the most accurate and comprehensive information, always refer to the [Official PRS Year Identification Guide](https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification).
 
 ## Contributing
 
-Found an issue with the identification algorithm or have suggestions for improvement? 
+Found an issue or want to improve the algorithm? Contact [Alexander Chisler](mailto:alexander.chisler@gmail.com).
 
-**Contact:** [alexander.chisler@gmail.com](mailto:alexander.chisler@gmail.com)
-
-Please include:
-- The serial number you're trying to identify
-- The expected result vs. actual result
-- Any additional context about the guitar
+When reporting issues, please include:
+- The serial number in question
+- The model type (if known)
+- The expected year (if known)
+- Any relevant context
 
 ## License
 
-This project is for educational and personal use. PRS Guitars is a trademark of PRS Guitars, LLC.
-
-## Contact
-
-For questions, bug reports, or suggestions about the identification algorithm, please contact:
-
-**Alexander Chisler**  
-Email: [alexander.chisler@gmail.com](mailto:alexander.chisler@gmail.com)
+MIT

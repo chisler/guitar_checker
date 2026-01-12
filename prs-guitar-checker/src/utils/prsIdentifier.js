@@ -221,7 +221,9 @@ export function identifyPRS(serialNumber) {
     return { error: 'Please enter a valid serial number' };
   }
 
-  const originalSerial = serialNumber.trim();
+  // Normalize: remove spaces, convert to uppercase, remove trailing non-digit characters (like 'x')
+  let originalSerial = serialNumber.trim().replace(/\s+/g, ''); // Remove spaces
+  originalSerial = originalSerial.replace(/[^A-Z0-9]$/i, ''); // Remove trailing non-alphanumeric (like 'x')
   const serial = originalSerial.toUpperCase();
   const results = [];
 
@@ -241,6 +243,73 @@ export function identifyPRS(serialNumber) {
         'SE Korea models start with a letter (A-U) followed by numbers',
       ],
     };
+  }
+
+  // IMPORTANT: Check S2 models FIRST (before SE Korea) since S2 starts with S
+  // Check for S2 Models - handle both formats:
+  // 1. S2 followed by numbers (e.g., S2000001)
+  // 2. Year prefix + S2 + numbers (e.g., 23s2067156)
+  
+  // First check for year prefix + S2 format (e.g., 23s2067156)
+  const s2WithYearPrefix = serial.match(/^(\d{1,2})(s2|S2)(.+)$/);
+  if (s2WithYearPrefix) {
+    const yearPrefix = s2WithYearPrefix[1];
+    const numStr = s2WithYearPrefix[3].replace(/^0+/, '');
+    const num = parseInt(numStr, 10);
+    if (!isNaN(num)) {
+      const possibleYears = YEAR_PREFIXES[yearPrefix];
+      if (possibleYears) {
+        if (possibleYears.length === 1) {
+          const year = possibleYears[0];
+          for (const range of S2_RANGES) {
+            if (range.year === year && num >= range.min && num <= range.max) {
+              results.push({
+                model: 'S2 Series',
+                year: year,
+                location: 'Back of headstock',
+                confidence: 'high',
+              });
+              break;
+            }
+          }
+        } else {
+          for (const year of possibleYears) {
+            for (const range of S2_RANGES) {
+              if (range.year === year && num >= range.min && num <= range.max) {
+                results.push({
+                  model: 'S2 Series',
+                  year: year,
+                  location: 'Back of headstock',
+                  confidence: 'high',
+                });
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Check for S2 Models starting with S2 (no year prefix) - MUST check before SE Korea
+  let matchedS2 = false;
+  if (serial.startsWith('S2')) {
+    const numStr = serial.substring(2).replace(/^0+/, '');
+    const num = parseInt(numStr, 10);
+    if (!isNaN(num)) {
+      for (const range of S2_RANGES) {
+        if (num >= range.min && num <= range.max) {
+          results.push({
+            model: 'S2 Series',
+            year: range.year,
+            location: 'Back of headstock',
+            confidence: 'high',
+          });
+          matchedS2 = true;
+          break;
+        }
+      }
+    }
   }
 
   // Check for SE Indonesia (IA, IB, IC, etc. or CTIA, CTIB, etc.) - check before SE Korea
@@ -275,9 +344,12 @@ export function identifyPRS(serialNumber) {
   }
 
   // Check for Acoustic (A09, A10, etc.) - check before SE Korea since A12 could match both
+  // Acoustic format is A + two digits (A09-A23), so we need to match exactly that pattern
   let matchedAcoustic = false;
-  for (const prefix of Object.keys(ACOUSTIC_PREFIXES).sort((a, b) => b.length - a.length)) {
-    if (serial.startsWith(prefix)) {
+  const acousticMatch = serial.match(/^(A\d{2})/);
+  if (acousticMatch) {
+    const prefix = acousticMatch[1];
+    if (ACOUSTIC_PREFIXES[prefix]) {
       results.push({
         model: 'Acoustic',
         year: ACOUSTIC_PREFIXES[prefix],
@@ -285,15 +357,15 @@ export function identifyPRS(serialNumber) {
         confidence: 'high',
       });
       matchedAcoustic = true;
-      break;
     }
   }
 
   // Check for SE Korea (single letter prefix followed by numbers)
   // Only match if it's a single letter (A-U) followed by digits
   // AND it doesn't match any longer prefixes (like A12 for Acoustic)
+  // AND it's not S2 (which starts with S)
   const isSEKoreaFormat = /^[A-U]\d+$/.test(serial);
-  if (!matchedSEIndonesia && !matchedSEAcousticChina && !matchedAcoustic && isSEKoreaFormat) {
+  if (!matchedS2 && !matchedSEIndonesia && !matchedSEAcousticChina && !matchedAcoustic && isSEKoreaFormat) {
     // Double-check: if serial starts with a known acoustic prefix, don't match SE Korea
     const matchesAcousticPrefix = Object.keys(ACOUSTIC_PREFIXES).some(prefix => serial.startsWith(prefix));
     if (!matchesAcousticPrefix) {
@@ -337,68 +409,78 @@ export function identifyPRS(serialNumber) {
     }
   }
 
-  // Check for S2 Models - handle both formats:
-  // 1. S2 followed by numbers (e.g., S2000001)
-  // 2. Year prefix + S2 + numbers (e.g., 23s2067156)
-  
-  // First check for year prefix + S2 format (e.g., 23s2067156)
-  const s2WithYearPrefix = serial.match(/^(\d{1,2})(s2|S2)(.+)$/);
-  if (s2WithYearPrefix) {
-    const yearPrefix = s2WithYearPrefix[1];
-    const numStr = s2WithYearPrefix[3].replace(/^0+/, '');
-    const num = parseInt(numStr, 10);
-    if (!isNaN(num)) {
-      // Get the year from prefix
-      const possibleYears = YEAR_PREFIXES[yearPrefix];
-      if (possibleYears) {
-        // For 2-digit prefixes (2008+), use the single year
-        // For 1-digit prefixes, we need to match against ranges
-        if (possibleYears.length === 1) {
-          const year = possibleYears[0];
-          // Find matching S2 range for this year
-          for (const range of S2_RANGES) {
-            if (range.year === year && num >= range.min && num <= range.max) {
-              results.push({
-                model: 'S2 Series',
-                year: year,
-                location: 'Back of headstock',
-                confidence: 'high',
-              });
+  // Check for standard set-neck models (numeric serial numbers) - MUST check BEFORE CE (2016+)
+  // Extract year prefix and sequential number
+  let yearPrefix = null;
+  let sequentialNum = null;
+  let matchedSetNeck = false;
+
+  // Try 2-digit prefix first (for 2008+)
+  if (serial.length >= 2 && /^\d{2}/.test(serial)) {
+    const prefix = serial.substring(0, 2);
+    if (YEAR_PREFIXES[prefix]) {
+      const numStr = serial.substring(2);
+      const seqNum = parseInt(numStr, 10);
+      if (!isNaN(seqNum)) {
+        // Check if this matches any set-neck range
+        for (const range of SET_NECK_RANGES) {
+          if (seqNum >= range.min && seqNum <= range.max) {
+            const possibleYears = YEAR_PREFIXES[prefix];
+            if (possibleYears && possibleYears.includes(range.year)) {
+              yearPrefix = prefix;
+              sequentialNum = seqNum;
+              matchedSetNeck = true;
               break;
-            }
-          }
-        } else {
-          // 1-digit prefix - check all possible years
-          for (const year of possibleYears) {
-            for (const range of S2_RANGES) {
-              if (range.year === year && num >= range.min && num <= range.max) {
-                results.push({
-                  model: 'S2 Series',
-                  year: year,
-                  location: 'Back of headstock',
-                  confidence: 'high',
-                });
-                break;
-              }
             }
           }
         }
       }
     }
   }
-  
-  // Check for S2 Models starting with S2 (no year prefix)
-  if (serial.startsWith('S2')) {
-    const numStr = serial.substring(2).replace(/^0+/, '');
-    const num = parseInt(numStr, 10);
-    if (!isNaN(num)) {
-      for (const range of S2_RANGES) {
-        if (num >= range.min && num <= range.max) {
+
+  // Try 1-digit prefix if 2-digit didn't match a range
+  if (!matchedSetNeck && serial.length >= 1 && /^\d/.test(serial)) {
+    const prefix = serial[0];
+    if (YEAR_PREFIXES[prefix]) {
+      const numStr = serial.substring(1);
+      const seqNum = parseInt(numStr, 10);
+      if (!isNaN(seqNum)) {
+        // Check if this matches any set-neck range
+        for (const range of SET_NECK_RANGES) {
+          if (seqNum >= range.min && seqNum <= range.max) {
+            const possibleYears = YEAR_PREFIXES[prefix];
+            if (possibleYears && possibleYears.includes(range.year)) {
+              yearPrefix = prefix;
+              sequentialNum = seqNum;
+              matchedSetNeck = true;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // If we found a match, add it to results
+  if (matchedSetNeck && yearPrefix && sequentialNum) {
+    for (const range of SET_NECK_RANGES) {
+      if (sequentialNum >= range.min && sequentialNum <= range.max) {
+        const possibleYears = YEAR_PREFIXES[yearPrefix];
+        if (possibleYears && possibleYears.includes(range.year)) {
           results.push({
-            model: 'S2 Series',
+            model: 'Set-Neck (Standard)',
             year: range.year,
             location: 'Back of headstock',
             confidence: 'high',
+            yearPrefix: yearPrefix,
+            possibleYears: possibleYears,
+            breakdown: {
+              fullSerial: originalSerial,
+              yearPrefix: yearPrefix,
+              sequentialNumber: sequentialNum,
+              explanation: `Here's how it breaks down: The "${yearPrefix}" is the year (${range.year}), and "${sequentialNum.toLocaleString()}" is the production number. This could be a Custom 24, McCarty, Santana, Singlecut, or any other standard PRS model—the serial number doesn't tell us which one. To figure out the exact model, check things like pickups, headstock shape, or body style.`,
+              showModels: true
+            }
           });
           break;
         }
@@ -407,9 +489,11 @@ export function identifyPRS(serialNumber) {
   }
 
   // Check for CE Models (2016 and later) - uses year prefix
+  // BUT only if we haven't already matched a Set-Neck model (Set-Neck takes priority)
   // Skip if we already found an S2 match (S2 models also use year prefixes)
   const hasS2Match = results.some(r => r.model === 'S2 Series');
-  if (!hasS2Match && serial.match(/^(16|17|18|19|20|21|22|23)/)) {
+  const hasSetNeckMatch = results.some(r => r.model === 'Set-Neck (Standard)');
+  if (!hasS2Match && !hasSetNeckMatch && serial.match(/^(16|17|18|19|20|21|22|23)/)) {
     const prefix = serial.substring(0, 2);
     // Make sure it's not an S2 serial (which would have been caught above)
     if (!serial.match(/^\d{1,2}(s2|S2)/) && YEAR_PREFIXES[prefix] && YEAR_PREFIXES[prefix].length === 1) {
@@ -537,70 +621,6 @@ export function identifyPRS(serialNumber) {
     }
   }
 
-  // Check for standard set-neck models (numeric serial numbers)
-  // Extract year prefix and sequential number
-  let yearPrefix = null;
-  let sequentialNum = null;
-
-  // Try 2-digit prefix first (for 2008+)
-  if (serial.length >= 2 && /^\d{2}/.test(serial)) {
-    const prefix = serial.substring(0, 2);
-    if (YEAR_PREFIXES[prefix]) {
-      yearPrefix = prefix;
-      const numStr = serial.substring(2).replace(/^0+/, '');
-      sequentialNum = parseInt(numStr, 10);
-    }
-  }
-
-  // Try 1-digit prefix if 2-digit didn't work
-  if (!yearPrefix && serial.length >= 1 && /^\d/.test(serial)) {
-    const prefix = serial[0];
-    if (YEAR_PREFIXES[prefix]) {
-      yearPrefix = prefix;
-      const numStr = serial.substring(1).replace(/^0+/, '');
-      sequentialNum = parseInt(numStr, 10);
-    }
-  }
-
-  // If we have a sequential number, check set-neck ranges
-  if (sequentialNum && !isNaN(sequentialNum)) {
-    for (const range of SET_NECK_RANGES) {
-      if (sequentialNum >= range.min && sequentialNum <= range.max) {
-        const possibleYears = YEAR_PREFIXES[yearPrefix];
-        // If prefix matches the range year, it's a match
-        if (possibleYears && possibleYears.includes(range.year)) {
-          results.push({
-            model: 'Set-Neck (Standard)',
-            year: range.year,
-            location: 'Back of headstock',
-            confidence: 'high',
-            yearPrefix: yearPrefix,
-            possibleYears: possibleYears,
-            breakdown: {
-              fullSerial: originalSerial,
-              yearPrefix: yearPrefix,
-              sequentialNumber: sequentialNum,
-              explanation: `Here's how it breaks down: The "${yearPrefix}" is the year (${range.year}), and "${sequentialNum.toLocaleString()}" is the production number. This could be a Custom 24, McCarty, Santana, Singlecut, or any other standard PRS model—the serial number doesn't tell us which one. To figure out the exact model, check things like pickups, headstock shape, or body style.`,
-              showModels: true
-            }
-          });
-          break;
-        }
-      }
-    }
-
-    // If no exact match but we have a prefix, provide possible years
-    if (results.length === 0 && yearPrefix && YEAR_PREFIXES[yearPrefix]) {
-      results.push({
-        model: 'Unknown Model (Year Prefix Match)',
-        year: null,
-        possibleYears: YEAR_PREFIXES[yearPrefix],
-        location: 'Check serial number location',
-        confidence: 'low',
-        note: 'Serial number format recognized but model could not be determined. Check the serial number location and format.',
-      });
-    }
-  }
 
   if (results.length === 0) {
     return {
