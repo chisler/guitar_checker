@@ -1,0 +1,387 @@
+PRS Guitars - Year Identification Guide
+Source: https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification
+
+================================================================================
+YEAR IDENTIFICATION
+================================================================================
+
+SERIAL NUMBER YEAR-CODE PREFIX
+-------------------------------
+All guitars and basses have serial numbers which start with a year prefix. The prefix is the last one or two digits of the production year, and it applies to all models below.
+
+Prefix Number | Year(s)
+--------------|--------
+0             | 1990, 2000
+1             | 1991, 2001
+2             | 1992, 2002
+3             | 1993, 2003
+4             | 1994, 2004
+5             | 1985, 1995, 2005
+6             | 1986, 1996, 2006
+7             | 1987, 1997, 2007
+8             | 1988, 1998
+9             | 1989, 1999
+08            | 2008
+09            | 2009
+10            | 2010
+11            | 2011
+12            | 2012
+13            | 2013
+14            | 2014
+15            | 2015
+16            | 2016
+17            | 2017
+18            | 2018
+19            | 2019
+20            | 2020
+21            | 2021
+22            | 2022
+23            | 2023
+24            | 2024
+
+================================================================================
+SET-NECK SERIAL NUMBERS
+================================================================================
+The serial number of a set-neck model is located on the back of the guitar's headstock.
+After the year prefix, the remaining digits indicate the sequential order of set neck models built.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+0001 - 0400                | 1985
+0401 - 1700                | 1986
+1701 - 3500                | 1987
+3501 - 5400                | 1988
+5401 - 7600                | 1989
+7601 - 10100               | 1990
+10101 - 12600              | 1991
+12601 - 15000              | 1992
+15001 - 17900              | 1993
+17901 - 20900              | 1994
+20901 - 24600              | 1995
+24601 - 29500              | 1996
+29501 - 34600              | 1997
+34601 - 39100              | 1998
+39101 - 44499              | 1999
+44500 - 52199              | 2000
+52200 - 62199              | 2001
+62200 - 72353              | 2002
+72354 - 82254              | 2003
+82255 - 92555              | 2004
+92556 - 103103             | 2005
+103104 - 114940            | 2006
+114941 - 132401            | 2007
+132402 - 146419            | 2008
+146420 - 159132            | 2009
+159133 - 170591            | 2010
+170592 - 183862            | 2011
+183863 - 196410            | 2012
+196411 - 206059            | 2013
+206060 - 215491            | 2014
+215492 - 224954            | 2015
+224955 - 236147            | 2016
+236148 - 248633            | 2017
+248634 - 271078            | 2018
+271079 - 298384            | 2019
+298385 - 315748            | 2020
+315749 - 340165            | 2021
+340166 - 354905            | 2022
+035906 - 363798            | 2023
+375043 - 397950            | 2024
+
+================================================================================
+CE MODELS (2016 AND LATER)
+================================================================================
+
+Prefix Number | Year
+--------------|-----
+16            | 2016
+17            | 2017
+18            | 2018
+19            | 2019
+20            | 2020
+21            | 2021
+22            | 2022
+23            | 2023
+
+================================================================================
+CE MODELS (1988 - 2008)
+================================================================================
+The serial number is located on the neck plate on the back of the guitar.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+7 0001 - 0270              | 1988
+7 0271 - 1830              | 1989
+7 1831 - 3200              | 1990
+7 3201 - 4540              | 1991
+7 4541 - 7090              | 1992
+7 7091 - 8820              | 1993
+7 8821 - 10700             | 1994
+7 10701 - 13000            | 1995
+7 13001 - 14680            | 1996
+7 14681 - 17130            | 1997
+7 or CE 17131 - 19580      | 1998
+CE 19581 - 20749           | 1999
+CE 20750 - 21599           | 2000
+CE 21600 - 23199           | 2001
+CE 23200 - 25389           | 2002
+CE 25390 - 26399           | 2003
+CE 26400 - 27900           | 2004
+CE 27901 - 29377           | 2005
+CE 29378 - 31800           | 2006
+CE 31801 - 32783           | 2007
+CE 32784 - 33881           | 2008
+
+================================================================================
+EG MODELS
+================================================================================
+The year of manufacture is determined the same way for the EG models. Like the CE models the serial number is located on the neck plate on the back of the guitar. The following number determines the model: 5 or EG for the EG models, then the sequential number for that particular model.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+5 0001 - 0920              | 1990
+5 0921 - 1290              | 1991
+5 1291 - 2070              | 1992
+5 2071 - 2870              | 1993
+5 2871 - 3190              | 1994
+5 3191 - 3300              | 1995
+
+================================================================================
+S2 MODELS
+================================================================================
+The serial number of an S2 Series model is located on the back of the guitar's headstock.
+After the year prefix, the remaining digits indicate the sequential order of set neck models built.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+S2000001 - S2003820        | 2013
+S2003821 - S2010529        | 2014
+S2010530 - S2017390        | 2015
+S2017391 - S2023214        | 2016
+S2023215 - S2027902        | 2017
+S2027903 - S2036779        | 2018
+S2036780 - S2043719        | 2019
+S2043719 - S2049421        | 2020
+S2049422 - S2059387        | 2021
+S2059388 - S2065338        | 2022
+S2065339 - S2067488        | 2023
+S2071820 - S2078569        | 2024
+
+================================================================================
+SWAMP ASH SPECIAL MODELS
+================================================================================
+The year of manufacture is determined the same way for the Swamp Ash Special. Like the CE and EG models the serial number is located on the neck plate on the back of the guitar. The following number determines the model: 8 or SA for the Swamp Ash Special, then the sequential number for that particular model * the first 200 Swamp Ash Specials were given a CE serial number.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+8 00001 - 00410            | 1997
+8 or SA 00411 - 00760      | 1998
+SA 00761 - 00969           | 1999
+SA 00970 - 01179           | 2000
+SA 01180 - 01399           | 2001
+SA 01400 - 01899           | 2002
+SA 01900 - 02099           | 2003
+SA 02100 - 02287           | 2004
+SA 02288 - 02700           | 2005
+SA 02701 - 02800           | 2006
+SA 02801 - 03055           | 2007
+SA 03056 - 03256           | 2008
+SA 003257 - 03312          | 2009
+
+================================================================================
+BOLT-ON BASS: SEQUENTIAL SERIAL NUMBERS
+================================================================================
+After the year prefix, these models use a code digit of "4", indicating a bolt-on neck bass. This is followed by the sequential number for that particular model. The serial number will be located on the neck plate on the back of the bass.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+4 0001 - 0030              | 1989
+4 0031 - 0140              | 1990
+4 0141 - 0200              | 1991
+
+================================================================================
+SET-NECK BASS: SEQUENTIAL SERIAL NUMBERS
+================================================================================
+After the year prefix, these models us a code digit of "9", indicating a set-neck model bass. This is followed by the sequential number for that particular model. The serial number will be located on the back of the headstock.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+9 0001 - 0230              | 1986/87
+9 0231 - 0350              | 1988
+9 0351 - 0680              | 1989
+9 0681 - 0730              | 1990
+9 0731 - 0800              | 1991
+
+================================================================================
+ELECTRIC BASS: SEQUENTIAL SERIAL NUMBERS
+================================================================================
+After the year prefix, these models use a code of "EB", indicating Electric Bass. This is followed by the sequential number for that particular model. The serial number will be located on the back of the headstock.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+EB 00007 - 00072           | 2000
+EB 00073 - 00199           | 2001
+EB 00200 - 00422           | 2002
+EB 00423 - 00501           | 2003
+EB 00502 - 00650           | 2004
+
+================================================================================
+APPROXIMATE SE MODEL SERIAL NUMBERS (KOREA)
+================================================================================
+The serial number on SE model guitars can be found on the back of the headstock.
+The year of manufacture for SE guitars can be determined by the letter prefix prior to the sequence of numbers that follow.
+
+Prefix Letter | Year
+--------------|-----
+A             | 2000
+B             | 2001
+C             | 2002
+D             | 2003
+E             | 2004
+F             | 2005
+G             | 2006
+H             | 2007
+I             | 2008
+J             | 2009
+K             | 2010
+L             | 2011
+M             | 2012
+N             | 2013
+O             | 2014
+P             | 2015
+Q             | 2016
+R             | 2017
+S             | 2018
+T             | 2019
+U             | 2020
+
+================================================================================
+APPROXIMATE SE MODEL SERIAL NUMBERS (INDONESIA)
+================================================================================
+The serial number on SE model guitars can be found on the back of the headstock.
+The year of manufacture for SE guitars can be determined by the letter prefix prior to the sequence of numbers that follow.
+
+Prefix Letter | Year
+--------------|-----
+IA            | 2014
+IB            | 2015
+IC            | 2016
+ID            | 2017
+IE            | 2018
+CTIA          | 2018
+CTIB          | 2019
+CTIC          | 2020
+CTID          | 2021
+CTIE          | 2022
+CTIF          | 2023
+CTIG          | 2024
+
+================================================================================
+ACOUSTIC SERIAL NUMBERS
+================================================================================
+The serial number of an acoustic is located on the label inside the sound hole of the guitar.
+All acoustic serial numbers begin with the letter "A", and are followed by the two digit year prefix.
+
+Prefix Letter | Year
+--------------|-----
+A09           | 2009
+A10           | 2010
+A11           | 2011
+A12           | 2012
+A13           | 2013
+A14           | 2014
+A15           | 2015
+A16           | 2016
+A17           | 2017
+A18           | 2018
+A19           | 2019
+A20           | 2020
+A21           | 2021
+A22           | 2022
+A23           | 2023
+
+The remaining digits indicate the sequential number of acoustics built to date.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+0001 - 0190                | 2009
+0191 - 0517                | 2010
+0518 -                      | 2011
+
+================================================================================
+APPROXIMATE SE ACOUSTIC SERIAL NUMBERS (CHINA)
+================================================================================
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+CTCA                        | 2017
+CTCB                        | 2018
+CTCC                        | 2019
+CTCD                        | 2020
+CTCE                        | 2021
+CTCF                        | 2022
+CTCG                        | 2023
+
+================================================================================
+AMPLIFIER SERIAL NUMBERS
+================================================================================
+The serial number of an amp is located on the back of the amp in the upper right corner, or on a sticker.
+All amplifier serial numbers begin with the code "AMP" and are followed by the two digit year prefix.
+
+Prefix Letter | Year
+--------------|-----
+AMP08         | 2008
+AMP09         | 2009
+AMP10         | 2010
+AMP11         | 2011
+AMP12         | 2012
+AMP13         | 2013
+AMP14         | 2014
+AMP15         | 2015
+AMP16         | 2016
+AMP17         | 2017
+AMP18         | 2018
+AMP19         | 2019
+AMP20         | 2020
+
+The remaining digits indicate the sequential number of amplifiers built that year. This sequence repeats each year.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+0001 - 0052                | 2008
+0001 - 0912                | 2009
+0001 - 0575                | 2010
+0001 -                      | 2011
+
+================================================================================
+SPEAKER CABINET SERIAL NUMBERS
+================================================================================
+The serial number of a speaker cabinet is located on the back of the cabinet in the upper right corner.
+All cabinet serial numbers begin with the code "SPK" and are followed by the two digit year prefix.
+
+Prefix Letter | Year
+--------------|-----
+SPK09         | 2009
+SPK10         | 2010
+SPK11         | 2011
+SPK12         | 2012
+SPK13         | 2013
+SPK14         | 2014
+SPK15         | 2015
+SPK16         | 2016
+SPK17         | 2017
+SPK18         | 2018
+SPK19         | 2019
+SPK20         | 2020
+
+The remaining digits indicate the sequential number of cabinets built that year. This sequence repeats each year.
+
+Approximate Serial Numbers | Year
+---------------------------|-----
+0001 - 0366                | 2009
+0001 - 0260                | 2010
+0001 -                      | 2011
+
+================================================================================
+END OF GUIDE
+================================================================================
