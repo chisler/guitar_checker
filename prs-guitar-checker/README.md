@@ -2,6 +2,8 @@
 
 A React + Vite web application that identifies PRS (Paul Reed Smith) guitar models and manufacturing years from serial numbers.
 
+**Note:** This is an unofficial tool and is not affiliated with PRS Guitars. For official support, please visit [PRS Support](https://support.prsguitars.com).
+
 ## Features
 
 - 🔍 Identify PRS guitar models and years from serial numbers
@@ -93,6 +95,24 @@ A local copy of the guide is saved as `prs_year_identification_guide.txt` in the
 - Vite 7
 - CSS3 (with modern features like gradients and animations)
 
+## Contributing
+
+Found an issue with the identification algorithm or have suggestions for improvement? 
+
+**Contact:** [alexander.chisler@gmail.com](mailto:alexander.chisler@gmail.com)
+
+Please include:
+- The serial number you're trying to identify
+- The expected result vs. actual result
+- Any additional context about the guitar
+
 ## License
 
 This project is for educational and personal use. PRS Guitars is a trademark of PRS Guitars, LLC.
+
+## Contact
+
+For questions, bug reports, or suggestions about the identification algorithm, please contact:
+
+**Alexander Chisler**  
+Email: [alexander.chisler@gmail.com](mailto:alexander.chisler@gmail.com)

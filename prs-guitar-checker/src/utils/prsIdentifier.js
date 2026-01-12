@@ -225,20 +225,27 @@ export function identifyPRS(serialNumber) {
   const serial = originalSerial.toUpperCase();
   const results = [];
 
-  // Check for SE Korea (single letter prefix)
-  if (serial.length > 0 && /^[A-U]$/.test(serial[0])) {
-    const year = SE_KOREA_PREFIXES[serial[0]];
-    if (year) {
-      results.push({
-        model: 'SE (Korea)',
-        year: year,
-        location: 'Back of headstock',
-        confidence: 'high',
-      });
-    }
+  // Basic validation: serial numbers should contain at least some digits or known prefixes
+  // Reject pure gibberish (all letters with no numbers or known patterns)
+  const hasNumbers = /\d/.test(serial);
+  const hasKnownPrefix = /^(S2|CE|SA|EB|AMP|SPK|A\d|CT|IA|IB|IC|ID|IE)/i.test(serial);
+  const isValidSEKorea = /^[A-U]\d/.test(serial); // Letter followed by numbers
+  
+  // If it's all letters with no numbers and doesn't match known prefixes, it's likely invalid
+  if (!hasNumbers && !hasKnownPrefix && !isValidSEKorea && serial.length > 3) {
+    return {
+      error: 'Invalid serial number format. PRS serial numbers contain numbers or specific prefixes.',
+      suggestions: [
+        'Check that you entered the complete serial number',
+        'Verify there are no typos',
+        'SE Korea models start with a letter (A-U) followed by numbers',
+      ],
+    };
   }
 
-  // Check for SE Indonesia (IA, IB, IC, etc. or CTIA, CTIB, etc.)
+  // Check for SE Indonesia (IA, IB, IC, etc. or CTIA, CTIB, etc.) - check before SE Korea
+  // to avoid false matches
+  let matchedSEIndonesia = false;
   for (const prefix of Object.keys(SE_INDONESIA_PREFIXES).sort((a, b) => b.length - a.length)) {
     if (serial.startsWith(prefix)) {
       results.push({
@@ -247,11 +254,13 @@ export function identifyPRS(serialNumber) {
         location: 'Back of headstock',
         confidence: 'high',
       });
+      matchedSEIndonesia = true;
       break;
     }
   }
 
-  // Check for SE Acoustic China
+  // Check for SE Acoustic China - check before SE Korea
+  let matchedSEAcousticChina = false;
   for (const prefix of Object.keys(SE_ACOUSTIC_CHINA).sort((a, b) => b.length - a.length)) {
     if (serial.startsWith(prefix)) {
       results.push({
@@ -260,11 +269,13 @@ export function identifyPRS(serialNumber) {
         location: 'Back of headstock',
         confidence: 'high',
       });
+      matchedSEAcousticChina = true;
       break;
     }
   }
 
-  // Check for Acoustic (A09, A10, etc.)
+  // Check for Acoustic (A09, A10, etc.) - check before SE Korea since A12 could match both
+  let matchedAcoustic = false;
   for (const prefix of Object.keys(ACOUSTIC_PREFIXES).sort((a, b) => b.length - a.length)) {
     if (serial.startsWith(prefix)) {
       results.push({
@@ -273,9 +284,32 @@ export function identifyPRS(serialNumber) {
         location: 'Label inside sound hole',
         confidence: 'high',
       });
+      matchedAcoustic = true;
       break;
     }
   }
+
+  // Check for SE Korea (single letter prefix followed by numbers)
+  // Only match if it's a single letter (A-U) followed by digits
+  // AND it doesn't match any longer prefixes (like A12 for Acoustic)
+  const isSEKoreaFormat = /^[A-U]\d+$/.test(serial);
+  if (!matchedSEIndonesia && !matchedSEAcousticChina && !matchedAcoustic && isSEKoreaFormat) {
+    // Double-check: if serial starts with a known acoustic prefix, don't match SE Korea
+    const matchesAcousticPrefix = Object.keys(ACOUSTIC_PREFIXES).some(prefix => serial.startsWith(prefix));
+    if (!matchesAcousticPrefix) {
+      const year = SE_KOREA_PREFIXES[serial[0]];
+      if (year) {
+        results.push({
+          model: 'SE (Korea)',
+          year: year,
+          location: 'Back of headstock',
+          confidence: 'high',
+        });
+      }
+    }
+  }
+
+
 
   // Check for Amplifier (AMP08, AMP09, etc.)
   for (const prefix of Object.keys(AMP_PREFIXES).sort((a, b) => b.length - a.length)) {
@@ -546,7 +580,7 @@ export function identifyPRS(serialNumber) {
               fullSerial: originalSerial,
               yearPrefix: yearPrefix,
               sequentialNumber: sequentialNum,
-              explanation: `This serial number breaks down as: Year prefix "${yearPrefix}" (${range.year}) + Sequential number "${sequentialNum.toLocaleString()}". Set-Neck (Standard) models include Custom 24, McCarty, Santana, Singlecut, and other standard PRS models. The serial number format doesn't encode the specific model name—only the year and production sequence. To identify the exact model, check other features like pickup configuration, headstock shape, or body style.`,
+              explanation: `Here's how it breaks down: The "${yearPrefix}" is the year (${range.year}), and "${sequentialNum.toLocaleString()}" is the production number. This could be a Custom 24, McCarty, Santana, Singlecut, or any other standard PRS model—the serial number doesn't tell us which one. To figure out the exact model, check things like pickups, headstock shape, or body style.`,
               showModels: true
             }
           });

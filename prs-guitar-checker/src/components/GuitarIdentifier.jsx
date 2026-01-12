@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { identifyPRS } from '../utils/prsIdentifier';
 import { SET_NECK_STANDARD_MODELS } from '../utils/prsModels';
+import { getModelLink } from '../utils/prsModelLinks';
 import './GuitarIdentifier.css';
 
 const EXAMPLE_SERIALS = [
@@ -49,18 +50,10 @@ function GuitarIdentifier() {
     <div className="guitar-identifier">
       <div className="identifier-container">
         <header className="identifier-header">
-          <h1>PRS Guitar Year Identifier</h1>
+          <h1>PRS Guitar Identifier</h1>
           <p className="subtitle">
-            Identify your PRS guitar's model and year from its serial number
+            Not sure if you need this? If you do, here we go. Enter your serial number below to identify your PRS guitar's model and year.
           </p>
-          <a 
-            href="https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="guide-link"
-          >
-            📖 View Official PRS Guide
-          </a>
         </header>
 
         <form onSubmit={handleSubmit} className="identifier-form">
@@ -128,17 +121,37 @@ function GuitarIdentifier() {
                     ))}
                   </ul>
                 )}
+                <div className="error-contact">
+                  <p className="error-contact-text">
+                    Found a mistake or want to help improve this?{' '}
+                    <a href="mailto:alexander.chisler@gmail.com" className="error-contact-link">
+                      Email me
+                    </a>
+                  </p>
+                </div>
               </div>
             ) : (
               <div className="result-success">
-                <h2>✅ Identification Results</h2>
+                <h2>✅ Here's What We Found</h2>
                 {result.results.map((item, idx) => (
                   <div key={idx} className="result-item">
                     <div className="result-header">
-                      <h3>{item.model}</h3>
+                      <div className="result-title-group">
+                        <h3>{item.model}</h3>
+                        {getModelLink(item.model) && (
+                          <a
+                            href={getModelLink(item.model)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="model-website-link"
+                          >
+                            View on PRS.com →
+                          </a>
+                        )}
+                      </div>
                       <span className={`confidence-badge confidence-${item.confidence}`}>
-                        {item.confidence === 'high' ? '✓ High' : 
-                         item.confidence === 'medium' ? '~ Medium' : '? Low'}
+                        {item.confidence === 'high' ? '✓ Verified' : 
+                         item.confidence === 'medium' ? '~ Likely' : '? Uncertain'}
                       </span>
                     </div>
                     
@@ -186,9 +199,9 @@ function GuitarIdentifier() {
                       
                       {item.breakdown?.showModels && (
                         <div className="models-section">
-                          <h4 className="models-title">Possible Models</h4>
+                          <h4 className="models-title">Which Model Is It?</h4>
                           <p className="models-subtitle">
-                            Your serial number could be any of these Set-Neck (Standard) models. Check your guitar's features to identify the exact model.
+                            Your serial number could be any of these models. Check your guitar's features (pickups, headstock shape, etc.) to figure out which one.
                           </p>
                           <div className="models-list">
                             {SET_NECK_STANDARD_MODELS.map((model, idx) => (
@@ -229,19 +242,43 @@ function GuitarIdentifier() {
           onClick={() => setShowInfo(!showInfo)}
           type="button"
         >
-          <span>How to Use</span>
+          <span>How to Use & Official Guide</span>
           <span className={`arrow ${showInfo ? 'open' : ''}`}>▼</span>
         </button>
         {showInfo && (
           <div className="info-section">
-            <ul>
-              <li>Enter the complete serial number from your PRS guitar</li>
-              <li>Serial numbers can be found on the back of the headstock, neck plate, or inside the sound hole (for acoustics)</li>
-              <li>The identifier supports all PRS models including Standard, CE, SE, S2, Acoustic, and Bass models</li>
-              <li>If multiple matches are found, check the serial number location to determine the correct model</li>
-            </ul>
+            <div className="info-content">
+              <h4>How to Use</h4>
+              <ul>
+                <li>Enter your PRS guitar's serial number</li>
+                <li>Serial numbers are usually on the back of the headstock, neck plate, or inside the sound hole (acoustics)</li>
+                <li>Works with all PRS models: Standard, CE, SE, S2, Acoustic, Bass, and more</li>
+              </ul>
+              
+              <h4>Official PRS Guide</h4>
+              <p className="official-guide-note">
+                This tool is based on the official PRS identification guide. For the most accurate and up-to-date information, check the source:
+              </p>
+              <a 
+                href="https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="official-guide-link"
+              >
+                📖 Official PRS Year Identification Guide →
+              </a>
+            </div>
           </div>
         )}
+
+        <div className="contact-section">
+          <p className="contact-text">
+            Found a mistake or want to help improve this?{' '}
+            <a href="mailto:alexander.chisler@gmail.com" className="contact-link">
+              Email me
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
