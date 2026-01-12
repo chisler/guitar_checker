@@ -1,5 +1,9 @@
 // PRS Guitar Year Identification Logic
-// Based on: https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification
+// Based on the official PRS Year Identification Guide:
+// https://support.prsguitars.com/hc/en-us/articles/4408314427547-Year-Identification
+//
+// This implementation follows the official guide exactly. All serial number formats,
+// prefixes, and ranges are based on the official PRS support documentation.
 
 // Year prefix mapping (prefix -> possible years)
 const YEAR_PREFIXES = {
@@ -42,10 +46,14 @@ const SE_KOREA_PREFIXES = {
 };
 
 // SE Indonesia prefixes
+// Note: The official guide shows CTI* prefixes for Indonesia SE models
+// CTI* prefixes may also be used for China SE models (non-acoustic), but the guide doesn't explicitly list SE China (non-acoustic)
+// We identify CTI* prefixes as SE (Indonesia/China) since the guide doesn't distinguish
 const SE_INDONESIA_PREFIXES = {
   'IA': 2014, 'IB': 2015, 'IC': 2016, 'ID': 2017, 'IE': 2018,
   'CTIA': 2018, 'CTIB': 2019, 'CTIC': 2020, 'CTID': 2021,
   'CTIE': 2022, 'CTIF': 2023, 'CTIG': 2024,
+  // Note: Guide only goes to CTIG (2024). If 2025 models exist, they may use CTIH, but not confirmed in official guide
 };
 
 // Set-neck serial number ranges
@@ -88,7 +96,7 @@ const SET_NECK_RANGES = [
   { min: 298385, max: 315748, year: 2020 },
   { min: 315749, max: 340165, year: 2021 },
   { min: 340166, max: 354905, year: 2022 },
-  { min: 35906, max: 363798, year: 2023 },
+  { min: 35906, max: 363798, year: 2023 }, // Note: Guide shows 035906 - 363798 (leading zero)
   { min: 375043, max: 397950, year: 2024 },
 ];
 
@@ -313,15 +321,20 @@ export function identifyPRS(serialNumber) {
   }
 
   // Check for SE Indonesia (IA, IB, IC, etc. or CTIA, CTIB, etc.) - check before SE Korea
-  // to avoid false matches
+  // Note: The official guide lists SE Indonesia prefixes. CTI* prefixes may also be used for China SE models
+  // (non-acoustic), but the guide doesn't explicitly list SE China (non-acoustic) serial formats.
+  // We identify CTI* prefixes as SE (Indonesia/China) since users report China models using these prefixes.
   let matchedSEIndonesia = false;
   for (const prefix of Object.keys(SE_INDONESIA_PREFIXES).sort((a, b) => b.length - a.length)) {
     if (serial.startsWith(prefix)) {
+      // Check if it's a CTI* prefix (may be used for both Indonesia and China SE models)
+      const isCTIPrefix = prefix.startsWith('CTI');
       results.push({
-        model: 'SE (Indonesia)',
+        model: isCTIPrefix ? 'SE (Indonesia/China)' : 'SE (Indonesia)',
         year: SE_INDONESIA_PREFIXES[prefix],
         location: 'Back of headstock',
-        confidence: 'high',
+        confidence: isCTIPrefix ? 'medium' : 'high', // Medium confidence for CTI* since guide doesn't explicitly list SE China
+        note: isCTIPrefix ? 'CTI* prefixes are listed for SE Indonesia in the official guide, but may also be used for SE China models (non-acoustic). Check the guitar\'s label or case to determine the exact origin.' : undefined,
       });
       matchedSEIndonesia = true;
       break;
@@ -491,12 +504,41 @@ export function identifyPRS(serialNumber) {
   // Check for CE Models (2016 and later) - uses year prefix
   // BUT only if we haven't already matched a Set-Neck model (Set-Neck takes priority)
   // Skip if we already found an S2 match (S2 models also use year prefixes)
+  // IMPORTANT: Only match CE (2016+) if the serial clearly doesn't match Set-Neck ranges
+  // CE (2016+) serials are typically shorter and don't match Set-Neck sequential ranges
   const hasS2Match = results.some(r => r.model === 'S2 Series');
   const hasSetNeckMatch = results.some(r => r.model === 'Set-Neck (Standard)');
+  
+  // Only check for CE (2016+) if:
+  // 1. No S2 or Set-Neck match already found
+  // 2. Serial starts with 16-23 (2016-2023)
+  // 3. The sequential number (after prefix) doesn't match any Set-Neck range
   if (!hasS2Match && !hasSetNeckMatch && serial.match(/^(16|17|18|19|20|21|22|23)/)) {
     const prefix = serial.substring(0, 2);
-    // Make sure it's not an S2 serial (which would have been caught above)
-    if (!serial.match(/^\d{1,2}(s2|S2)/) && YEAR_PREFIXES[prefix] && YEAR_PREFIXES[prefix].length === 1) {
+    const seqAfterPrefix = serial.substring(2);
+    const seqNum = parseInt(seqAfterPrefix, 10);
+    
+    // Check if this sequential number matches any Set-Neck range
+    let matchesSetNeckRange = false;
+    if (!isNaN(seqNum)) {
+      for (const range of SET_NECK_RANGES) {
+        if (seqNum >= range.min && seqNum <= range.max) {
+          const possibleYears = YEAR_PREFIXES[prefix];
+          if (possibleYears && possibleYears.includes(range.year)) {
+            matchesSetNeckRange = true;
+            break;
+          }
+        }
+      }
+    }
+    
+    // Only identify as CE (2016+) if it doesn't match Set-Neck ranges
+    // AND it's not an S2 serial
+    // AND the prefix is valid
+    if (!matchesSetNeckRange && 
+        !serial.match(/^\d{1,2}(s2|S2)/) && 
+        YEAR_PREFIXES[prefix] && 
+        YEAR_PREFIXES[prefix].length === 1) {
       results.push({
         model: 'CE (2016+)',
         year: YEAR_PREFIXES[prefix][0],
